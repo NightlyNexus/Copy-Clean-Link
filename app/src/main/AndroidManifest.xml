@@ -8,6 +8,7 @@
       android:name=".CopyCleanLinkApplication"
       android:allowBackup="true"
       android:enableOnBackInvokedCallback="true"
+      android:icon="@mipmap/ic_launcher"
       android:label="@string/label_application"
       android:supportsRtl="true"
       tools:targetApi="33">
