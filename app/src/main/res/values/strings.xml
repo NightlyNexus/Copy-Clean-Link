@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="label_application">Copy Clean Link</string>
+
+  <string name="label_process_text">Copy clean link</string>
+  <string name="label_send">Copy clean link</string> <!-- TODO: Remove this label? Do apps' share UIs display this label weirdly? -->
+  <string name="clipboard_copy_label">Clean link</string>
+
+  <string name="toast_process_text_missing_extra">No link to clean</string>
+  <string name="toast_send_missing_extra">No link to clean</string>
+  <string name="toast_invalid_link">Invalid link:\n%1$s</string>
+
+  <string name="controller_dialog_input_hint">Link to clean</string>
+  <string name="controller_dialog_submit">Copy clean link</string>
+</resources>
