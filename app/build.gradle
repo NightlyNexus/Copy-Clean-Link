@@ -62,7 +62,7 @@ android {
 
   applicationVariants.configureEach { variant ->
     variant.outputs.configureEach { output ->
-      outputFileName = "Template ${variant.versionCode}.apk"
+      outputFileName = "Copy Clean Link ${variant.versionCode}.apk"
       if (variant.flavorName == 'internal') {
         outputFileName = 'Internal ' + outputFileName
       }
