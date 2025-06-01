@@ -3,7 +3,6 @@
   <string name="label_application">Copy Clean Link</string>
 
   <string name="label_process_text">Copy clean link</string>
-  <string name="label_send">Copy clean link</string> <!-- TODO: Remove this label? Do apps' share UIs display this label weirdly? -->
   <string name="clipboard_copy_label">Clean link</string>
 
   <string name="toast_process_text_missing_extra">No link to clean</string>
