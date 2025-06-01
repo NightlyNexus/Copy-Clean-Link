@@ -33,11 +33,10 @@
         <data android:mimeType="text/plain" />
         <data android:mimeType="text/html" />
       </intent-filter>
-      <intent-filter>
+      <!-- We need this VIEW action to get the PROCESS_TEXT action to work.
+      https://issuetracker.google.com/issues/340098899 -->
+      <intent-filter tools:ignore="AppLinkUrlError">
         <action android:name="android.intent.action.VIEW" />
-
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
 
         <data android:scheme="http" />
         <data android:scheme="https" />
@@ -46,7 +45,6 @@
       </intent-filter>
       <intent-filter android:label="@string/label_send">
         <action android:name="android.intent.action.SEND" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <data android:mimeType="text/plain" />
       </intent-filter>
