@@ -70,6 +70,7 @@ class CopyCleanLinkReceiverActivity : Activity() {
       return
     }
 
+    var cleanedLink: String? = null
     var resolvedAmp = false
 
     linkCleaner.cleanLink(httpUrl, object : LinkCleaner.Callback {
@@ -78,7 +79,9 @@ class CopyCleanLinkReceiverActivity : Activity() {
           return
         }
         // TODO: Show a toast?
-        linkCopier.copyLink(cleanUrl.toString())
+        val cleanedUrl = cleanUrl.toString()
+        cleanedLink = cleanedUrl
+        linkCopier.copyLink(cleanedUrl)
       }
     })
 
@@ -92,6 +95,9 @@ class CopyCleanLinkReceiverActivity : Activity() {
       }
 
       override fun onResolved(link: String) {
+        if (link == cleanedLink) {
+          return
+        }
         runOnUiThread {
           resolvedAmp = true
           // TODO: Show a toast?

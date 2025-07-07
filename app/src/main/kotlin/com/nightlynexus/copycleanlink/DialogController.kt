@@ -64,6 +64,7 @@ internal class DialogController(
       return
     }
 
+    var cleanedLink: String? = null
     var resolvedAmp = false
 
     linkCleaner.cleanLink(httpUrl, object : LinkCleaner.Callback {
@@ -72,7 +73,9 @@ internal class DialogController(
           return
         }
         // TODO: Show a toast?
-        linkCopier.copyLink(cleanUrl.toString())
+        val cleanedUrl = cleanUrl.toString()
+        cleanedLink = cleanedUrl
+        linkCopier.copyLink(cleanedUrl)
       }
     })
 
@@ -86,6 +89,9 @@ internal class DialogController(
       }
 
       override fun onResolved(link: String) {
+        if (link == cleanedLink) {
+          return
+        }
         rootView.post {
           resolvedAmp = true
           // TODO: Show a toast?
