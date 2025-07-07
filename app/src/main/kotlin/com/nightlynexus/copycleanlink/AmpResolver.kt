@@ -53,7 +53,7 @@ internal class AmpResolver(private val client: OkHttpClient) {
             callback.onHttpFailure(response.code, response.message)
             return
           }
-          val source = response.body!!.source()
+          val source = response.body.source()
           val buffer = source.buffer
           while (true) {
             val htmlLinkPrefixIndex = source.indexOf(htmlLinkPrefix)
