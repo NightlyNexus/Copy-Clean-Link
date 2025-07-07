@@ -26,6 +26,7 @@ buildscript {
       diskcrashreporter: '0.2.5',
       junit: '4.13.2',
       kotlin: '2.2.0',
+      kotlinPoet: '2.2.0',
       ksp: '2.2.0-2.0.2',
       ktor: '3.1.1',
       leakcanary: '2.14',
@@ -79,7 +80,14 @@ buildscript {
           stdlibJdk8: "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin",
           test: "org.jetbrains.kotlin:kotlin-test:$versions.kotlin"
       ],
-      kspGradlePlugin : "com.google.devtools.ksp:symbol-processing-gradle-plugin:$versions.ksp",
+      kotlinPoet: [
+          core: "com.squareup:kotlinpoet:$versions.kotlinPoet",
+          ksp: "com.squareup:kotlinpoet-ksp:$versions.kotlinPoet"
+      ],
+      ksp: [
+          api: "com.google.devtools.ksp:symbol-processing-api:$versions.ksp",
+          gradlePlugin: "com.google.devtools.ksp:symbol-processing-gradle-plugin:$versions.ksp"
+      ],
       ktor: [
           core: "io.ktor:ktor-server-core:$versions.ktor",
           netty: "io.ktor:ktor-server-netty:$versions.ktor"
@@ -111,7 +119,7 @@ buildscript {
   dependencies {
     classpath deps.androidGradlePlugin
     classpath deps.kotlin.gradlePlugin
-    classpath deps.kspGradlePlugin
+    classpath deps.ksp.gradlePlugin
     classpath deps.sqldelight.gradlePlugin
   }
 

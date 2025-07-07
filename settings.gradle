@@ -1,2 +1,3 @@
 rootProject.name = "Copy Clean Link"
 include ':app'
+include ':clean-urls-json-processor'

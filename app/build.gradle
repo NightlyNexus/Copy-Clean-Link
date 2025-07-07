@@ -71,8 +71,7 @@ android {
 }
 
 dependencies {
-  ksp deps.moshi.kotlinCodegen
-  implementation deps.moshi.core
+  ksp project(':clean-urls-json-processor')
   implementation deps.okhttp.core
   implementation deps.okio
   implementation deps.material

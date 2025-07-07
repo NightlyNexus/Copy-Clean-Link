@@ -64,20 +64,9 @@ internal class DialogController(
       return
     }
 
-    var cleanedLink: String? = null
-    var resolvedAmp = false
-
-    linkCleaner.cleanLink(httpUrl, object : LinkCleaner.Callback {
-      override fun cleanUrl(cleanUrl: HttpUrl) {
-        if (resolvedAmp) {
-          return
-        }
-        // TODO: Show a toast?
-        val cleanedUrl = cleanUrl.toString()
-        cleanedLink = cleanedUrl
-        linkCopier.copyLink(cleanedUrl)
-      }
-    })
+    val cleanUrl = linkCleaner.cleanLink(httpUrl).toString()
+    // TODO: Show a toast?
+    linkCopier.copyLink(cleanUrl)
 
     ampResolver.resolveAmp(httpUrl, object : AmpResolver.Callback {
       override fun onIoFailure(e: IOException) {
@@ -89,11 +78,10 @@ internal class DialogController(
       }
 
       override fun onResolved(link: String) {
-        if (link == cleanedLink) {
+        if (link == cleanUrl) {
           return
         }
         rootView.post {
-          resolvedAmp = true
           // TODO: Show a toast?
           linkCopier.copyLink(link)
         }

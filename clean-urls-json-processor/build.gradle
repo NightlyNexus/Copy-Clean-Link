@@ -1,0 +1,13 @@
+plugins {
+  id 'com.google.devtools.ksp'
+  id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+  ksp deps.moshi.kotlinCodegen
+  implementation deps.moshi.core
+  implementation deps.okio
+  implementation deps.kotlinPoet.core
+  implementation deps.kotlinPoet.ksp
+  implementation deps.ksp.api
+}
