@@ -31,7 +31,7 @@ internal class AmpResolver(private val client: OkHttpClient) {
   fun resolveAmp(
     ampUrl: HttpUrl,
     callback: Callback
-  ) {
+  ): Call {
     val request = Request.Builder()
       .url(ampUrl)
       .build()
@@ -41,7 +41,9 @@ internal class AmpResolver(private val client: OkHttpClient) {
         call: Call,
         e: IOException
       ) {
-        callback.onIoFailure(e)
+        if (!call.isCanceled()) {
+          callback.onIoFailure(e)
+        }
       }
 
       override fun onResponse(
@@ -88,5 +90,6 @@ internal class AmpResolver(private val client: OkHttpClient) {
         }
       }
     })
+    return call
   }
 }

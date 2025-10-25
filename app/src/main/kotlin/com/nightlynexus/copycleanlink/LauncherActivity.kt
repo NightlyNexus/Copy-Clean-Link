@@ -7,17 +7,14 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 
 class LauncherActivity : AppCompatActivity() {
-  private lateinit var linkCleaner: LinkCleaner
-  private lateinit var ampResolver: AmpResolver
-  private lateinit var linkCopier: LinkCopier
+  private lateinit var clipboardCopier: ClipboardCopier
+  private lateinit var textProgramRunner: TextProgramRunner
 
   override fun onCreate(savedInstanceState: Bundle?) {
     val app = application as CopyCleanLinkApplication
-    linkCleaner = app.linkCleaner
-    ampResolver = app.ampResolver
-    linkCopier = app.linkCopier
+    clipboardCopier = app.clipboardCopier
+    textProgramRunner = app.textProgramRunner
     super.onCreate(savedInstanceState)
-
 
     val contentView = findViewById<ViewGroup>(android.R.id.content)
     window.setLayout(
@@ -26,9 +23,7 @@ class LauncherActivity : AppCompatActivity() {
     )
 
     val dialogController = DialogController(
-      linkCleaner,
-      ampResolver,
-      linkCopier,
+      textProgramRunner,
       contentView
     )
 
@@ -38,7 +33,7 @@ class LauncherActivity : AppCompatActivity() {
         object : ViewTreeObserver.OnWindowFocusChangeListener {
           override fun onWindowFocusChanged(hasFocus: Boolean) {
             contentView.viewTreeObserver.removeOnWindowFocusChangeListener(this)
-            dialogController.setText(linkCopier.getCurrentText())
+            dialogController.setText(clipboardCopier.getCurrentText())
           }
         }
       )

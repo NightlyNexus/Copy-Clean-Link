@@ -8,6 +8,10 @@
   <string name="toast_process_text_missing_extra">No link to clean</string>
   <string name="toast_send_missing_extra">No link to clean</string>
   <string name="toast_invalid_link">Invalid link:\n%1$s</string>
+  <plurals name="toast_extracting_links">
+    <item quantity="one">Extracting %1$d link from:\n%2$s</item>
+    <item quantity="other">Extracting %1$d links from:\n%2$s</item>
+  </plurals>
 
   <string name="controller_dialog_input_hint">Link to clean</string>
   <string name="controller_dialog_submit">Copy clean link</string>

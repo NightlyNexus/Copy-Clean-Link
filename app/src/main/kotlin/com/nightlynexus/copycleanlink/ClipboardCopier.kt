@@ -3,12 +3,12 @@ package com.nightlynexus.copycleanlink
 import android.content.ClipData
 import android.content.ClipboardManager
 
-internal class LinkCopier(
+internal class ClipboardCopier(
   private val clipboardManager: ClipboardManager,
   private val label: CharSequence
 ) {
-  fun copyLink(url: CharSequence) {
-    val clip = ClipData.newPlainText(label, url)
+  fun copyText(text: CharSequence) {
+    val clip = ClipData.newPlainText(label, text)
     clipboardManager.setPrimaryClip(clip)
   }
 
