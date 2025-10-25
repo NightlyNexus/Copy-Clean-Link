@@ -550,6 +550,7 @@
   },
   {
     "include": [
+      "*://search.brave.com/*",
       "*://actionnetwork.org/*",
       "*://*.bamboohr.com/careers/*",
       "*://www.tumblr.com/*",
@@ -607,6 +608,17 @@
     "params": [
       "mcid",
       "src"
+    ]
+  },
+  {
+    "include": [
+      "*://www.linkedin.com/posts/*"
+    ],
+    "exclude": [
+
+    ],
+    "params": [
+      "rcm"
     ]
   },
   {
@@ -911,6 +923,10 @@
       "https://urldefense.com/v3/*"
     ],
     "params": [
+      "sms_click",
+      "sms_source",
+      "sms_uph",
+      "ttclid",
       "_branch_referrer",
       "_branch_match_id",
       "__hssc",
