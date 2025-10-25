@@ -4,12 +4,18 @@ import android.content.Context
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 
-internal class TextWarner(
+internal interface TextWarner {
+  fun errorInvalidLink(text: CharSequence)
+
+  fun warnExtractingLinks(text: CharSequence, linkCount: Int)
+}
+
+internal class RealTextWarner(
   private val context: Context
-) {
+) : TextWarner {
   private val resources = context.resources
 
-  fun errorInvalidLink(text: CharSequence) {
+  override fun errorInvalidLink(text: CharSequence) {
     Toast.makeText(
       context,
       context.getString(R.string.toast_invalid_link, text),
@@ -17,7 +23,7 @@ internal class TextWarner(
     ).show()
   }
 
-  fun warnExtractingLinks(text: CharSequence, linkCount: Int) {
+  override fun warnExtractingLinks(text: CharSequence, linkCount: Int) {
     Toast.makeText(
       context,
       resources.getQuantityString(

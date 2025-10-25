@@ -13,7 +13,7 @@ internal class DialogController(
   private val rootView: View
   private val input: TextView
   private val submit: View
-  private val textWarner = TextWarner(context)
+  private val textWarner = RealTextWarner(context)
 
   init {
     val inflater = LayoutInflater.from(context)

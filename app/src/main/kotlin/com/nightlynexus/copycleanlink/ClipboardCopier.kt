@@ -3,16 +3,22 @@ package com.nightlynexus.copycleanlink
 import android.content.ClipData
 import android.content.ClipboardManager
 
-internal class ClipboardCopier(
+internal interface ClipboardCopier {
+  fun copyText(text: CharSequence)
+
+  fun getCurrentText(): CharSequence?
+}
+
+internal class RealClipboardCopier(
   private val clipboardManager: ClipboardManager,
   private val label: CharSequence
-) {
-  fun copyText(text: CharSequence) {
+) : ClipboardCopier {
+  override fun copyText(text: CharSequence) {
     val clip = ClipData.newPlainText(label, text)
     clipboardManager.setPrimaryClip(clip)
   }
 
-  fun getCurrentText(): CharSequence? {
+  override fun getCurrentText(): CharSequence? {
     val clip = clipboardManager.primaryClip
     if (clip != null) {
       if (clip.itemCount != 0) {

@@ -2,10 +2,14 @@ package com.nightlynexus.copycleanlink
 
 import android.util.Patterns
 
-internal class LinksExtractor {
+internal interface LinksExtractor {
+  fun extractLinks(text: CharSequence): List<String>
+}
+
+internal class RealLinksExtractor : LinksExtractor {
   private val pattern = Patterns.WEB_URL
 
-  fun extractLinks(text: CharSequence): List<String> {
+  override fun extractLinks(text: CharSequence): List<String> {
     val matcher = pattern.matcher(text)
     val links = mutableListOf<String>()
     while (matcher.find()) {

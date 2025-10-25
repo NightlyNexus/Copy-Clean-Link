@@ -49,7 +49,7 @@ class CopyCleanLinkReceiverActivity : Activity() {
       }
     }
 
-    val textWarner = TextWarner(this)
+    val textWarner = RealTextWarner(this)
     textProgramRunner.run(textWarner, text)
 
     finish()

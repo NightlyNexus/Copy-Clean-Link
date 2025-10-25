@@ -4,12 +4,11 @@ import androidx.annotation.WorkerThread
 import java.io.IOException
 import okhttp3.Call
 import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okio.ByteString.Companion.encodeUtf8
 
-internal class AmpResolver(private val client: OkHttpClient) {
+internal class AmpResolver(private val client: Call.Factory) {
   private val htmlLinkPrefix = "<link ".encodeUtf8()
   private val htmlLinkSuffix = '>'.code.toByte()
   private val canonicalAttribute = "rel=\"canonical\"".encodeUtf8()
