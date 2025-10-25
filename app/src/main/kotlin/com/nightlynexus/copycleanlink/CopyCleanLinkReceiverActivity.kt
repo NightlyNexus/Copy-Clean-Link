@@ -3,7 +3,6 @@ package com.nightlynexus.copycleanlink
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 
@@ -50,7 +49,8 @@ class CopyCleanLinkReceiverActivity : Activity() {
       }
     }
 
-    textProgramRunner.run(this, Handler(mainLooper), text)
+    val textWarner = TextWarner(this)
+    textProgramRunner.run(textWarner, text)
 
     finish()
   }

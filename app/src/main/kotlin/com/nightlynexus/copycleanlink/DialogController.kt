@@ -13,6 +13,7 @@ internal class DialogController(
   private val rootView: View
   private val input: TextView
   private val submit: View
+  private val textWarner = TextWarner(context)
 
   init {
     val inflater = LayoutInflater.from(context)
@@ -31,7 +32,7 @@ internal class DialogController(
   }
 
   private fun submit(text: CharSequence) {
-    textProgramRunner.run(context, rootView.handler!!, text)
+    textProgramRunner.run(textWarner, text)
   }
 
   fun getView(): View {

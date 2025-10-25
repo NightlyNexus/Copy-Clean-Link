@@ -1,11 +1,8 @@
 package com.nightlynexus.copycleanlink
 
-import android.content.Context
-import android.os.Handler
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
 import androidx.annotation.MainThread
 import java.io.IOException
+import java.util.concurrent.CopyOnWriteArrayList
 import okhttp3.Call
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
@@ -19,7 +16,7 @@ internal class TextProgramRunner(
   private var ampResolverCalls = mutableListOf<Call>()
 
   @MainThread
-  fun run(context: Context, mainHandler: Handler, text: CharSequence) {
+  fun run(textWarner: TextWarner, text: CharSequence) {
     for (i in ampResolverCalls.indices) {
       val ampResolverCall = ampResolverCalls[i]
       ampResolverCall.cancel()
@@ -28,29 +25,16 @@ internal class TextProgramRunner(
     val links = linksExtractor.extractLinks(text)
 
     if (links.isEmpty()) {
-      Toast.makeText(
-        context,
-        context.getString(R.string.toast_invalid_link, text),
-        LENGTH_LONG
-      ).show()
+      textWarner.errorInvalidLink(text)
       return
     }
 
     // Warn the user if we are not using the original text.
     if (links.size != 1 || links.first() != text.toString()) {
-      Toast.makeText(
-        context,
-        context.resources.getQuantityString(
-          R.plurals.toast_extracting_links,
-          links.size,
-          links.size,
-          text
-        ),
-        LENGTH_LONG
-      ).show()
+      textWarner.warnExtractingLinks(text, links.size)
     }
 
-    val cleanLinks = ArrayList<String>(links.size)
+    val cleanLinks = CopyOnWriteArrayList<String>()
     for (i in links.indices) {
       val link = links[i]
       val httpUrl = link.normalizeScheme().toHttpUrl()
@@ -71,11 +55,9 @@ internal class TextProgramRunner(
           if (link == cleanUrl) {
             return
           }
-          mainHandler.post {
-            cleanLinks[i] = link
-            // TODO: Show a toast?
-            clipboardCopier.copyText(linksCombiner.combineLinks(cleanLinks))
-          }
+          cleanLinks[i] = link
+          // TODO: Show a toast?
+          clipboardCopier.copyText(linksCombiner.combineLinks(cleanLinks))
         }
       })
     }
