@@ -1,6 +1,5 @@
 package com.nightlynexus.copycleanlink
 
-import androidx.annotation.MainThread
 import java.io.IOException
 import java.util.concurrent.CopyOnWriteArrayList
 import okhttp3.Call
@@ -15,7 +14,6 @@ internal class TextProgramRunner(
 ) {
   private var ampResolverCalls = mutableListOf<Call>()
 
-  @MainThread
   fun run(textWarner: TextWarner, text: CharSequence) {
     for (i in ampResolverCalls.indices) {
       val ampResolverCall = ampResolverCalls[i]
