@@ -11,13 +11,14 @@ internal class TextProgramRunner(
   private val ampResolver: AmpResolver,
   private val clipboardCopier: ClipboardCopier
 ) {
-  private var ampResolverCalls = mutableListOf<AmpResolver.Call>()
+  private val ampResolverCalls = mutableListOf<AmpResolver.Call>()
 
   fun run(textWarner: TextWarner, text: CharSequence) {
     for (i in ampResolverCalls.indices) {
       val ampResolverCall = ampResolverCalls[i]
       ampResolverCall.cancel()
     }
+    ampResolverCalls.clear()
 
     val links = linksExtractor.extractLinks(text)
 
