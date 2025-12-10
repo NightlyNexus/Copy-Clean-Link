@@ -15,6 +15,12 @@ internal class AmpResolver(private val client: Call.Factory) {
   private val hrefPrefix = "href=\"".encodeUtf8()
   private val hrefSuffix = '"'.code.toByte()
 
+  interface Call {
+    fun enqueue(callback: Callback)
+
+    fun cancel()
+  }
+
   @WorkerThread
   interface Callback {
     fun onIoFailure(e: IOException)
@@ -27,68 +33,90 @@ internal class AmpResolver(private val client: Call.Factory) {
     fun onResolved(link: String)
   }
 
-  fun resolveAmp(
-    ampUrl: HttpUrl,
-    callback: Callback
-  ): Call {
-    val request = Request.Builder()
-      .url(ampUrl)
-      .build()
-    val call = client.newCall(request)
-    call.enqueue(object : okhttp3.Callback {
-      override fun onFailure(
-        call: Call,
-        e: IOException
-      ) {
-        if (!call.isCanceled()) {
-          callback.onIoFailure(e)
-        }
+  fun resolveAmp(ampUrl: HttpUrl): Call {
+    val call = object : Call {
+      val call = client.newCall(
+        Request.Builder()
+          .url(ampUrl)
+          .build()
+      )
+
+      override fun enqueue(callback: Callback) {
+        call.enqueue(object : okhttp3.Callback {
+          override fun onFailure(
+            call: okhttp3.Call,
+            e: IOException
+          ) {
+            if (!call.isCanceled()) {
+              callback.onIoFailure(e)
+            }
+          }
+
+          override fun onResponse(
+            call: okhttp3.Call,
+            response: Response
+          ) {
+            response.use {
+              if (!response.isSuccessful) {
+                callback.onHttpFailure(response.code, response.message)
+                return
+              }
+              val source = response.body.source()
+              val buffer = source.buffer
+              while (true) {
+                val htmlLinkPrefixIndex = source.indexOf(htmlLinkPrefix)
+                if (htmlLinkPrefixIndex == -1L) {
+                  callback.onHttpFailure(
+                    response.code,
+                    "Missing link in HTML document."
+                  )
+                  return
+                }
+                source.skip(htmlLinkPrefixIndex + htmlLinkPrefix.size)
+                val htmlLinkSuffixIndex = source.indexOf(htmlLinkSuffix)
+                if (htmlLinkSuffixIndex == -1L) {
+                  callback.onHttpFailure(
+                    response.code,
+                    "Missing link ending in HTML document."
+                  )
+                  return
+                }
+                val canonicalAttributeIndex = buffer.indexOf(canonicalAttribute)
+                if (canonicalAttributeIndex != -1L
+                  && canonicalAttributeIndex < htmlLinkSuffixIndex) {
+                  val hrefPrefixIndex = buffer.indexOf(hrefPrefix)
+                  if (hrefPrefixIndex == -1L) {
+                    callback.onHttpFailure(
+                      response.code,
+                      "Missing link in HTML document."
+                    )
+                    return
+                  }
+                  buffer.skip(hrefPrefixIndex + hrefPrefix.size)
+                  val hrefSuffixIndex = buffer.indexOf(hrefSuffix)
+                  if (hrefSuffixIndex == -1L) {
+                    callback.onHttpFailure(
+                      response.code,
+                      "Missing link ending quotation mark."
+                    )
+                    return
+                  }
+                  val link = buffer.readUtf8(hrefSuffixIndex)
+                  callback.onResolved(
+                    link
+                  )
+                  return
+                }
+              }
+            }
+          }
+        })
       }
 
-      override fun onResponse(
-        call: Call,
-        response: Response
-      ) {
-        response.use {
-          if (!response.isSuccessful) {
-            callback.onHttpFailure(response.code, response.message)
-            return
-          }
-          val source = response.body.source()
-          val buffer = source.buffer
-          while (true) {
-            val htmlLinkPrefixIndex = source.indexOf(htmlLinkPrefix)
-            if (htmlLinkPrefixIndex == -1L) {
-              callback.onHttpFailure(response.code, "Missing link in HTML document.")
-              return
-            }
-            source.skip(htmlLinkPrefixIndex + htmlLinkPrefix.size)
-            val htmlLinkSuffixIndex = source.indexOf(htmlLinkSuffix)
-            if (htmlLinkSuffixIndex == -1L) {
-              callback.onHttpFailure(response.code, "Missing link ending in HTML document.")
-              return
-            }
-            val canonicalAttributeIndex = buffer.indexOf(canonicalAttribute)
-            if (canonicalAttributeIndex != -1L && canonicalAttributeIndex < htmlLinkSuffixIndex) {
-              val hrefPrefixIndex = buffer.indexOf(hrefPrefix)
-              if (hrefPrefixIndex == -1L) {
-                callback.onHttpFailure(response.code, "Missing link in HTML document.")
-                return
-              }
-              buffer.skip(hrefPrefixIndex + hrefPrefix.size)
-              val hrefSuffixIndex = buffer.indexOf(hrefSuffix)
-              if (hrefSuffixIndex == -1L) {
-                callback.onHttpFailure(response.code, "Missing link ending quotation mark.")
-                return
-              }
-              val link = buffer.readUtf8(hrefSuffixIndex)
-              callback.onResolved(link)
-              return
-            }
-          }
-        }
+      override fun cancel() {
+        call.cancel()
       }
-    })
+    }
     return call
   }
 }

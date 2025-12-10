@@ -2,7 +2,6 @@ package com.nightlynexus.copycleanlink
 
 import java.io.IOException
 import java.util.concurrent.CopyOnWriteArrayList
-import okhttp3.Call
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
 internal class TextProgramRunner(
@@ -12,7 +11,7 @@ internal class TextProgramRunner(
   private val ampResolver: AmpResolver,
   private val clipboardCopier: ClipboardCopier
 ) {
-  private var ampResolverCalls = mutableListOf<Call>()
+  private var ampResolverCalls = mutableListOf<AmpResolver.Call>()
 
   fun run(textWarner: TextWarner, text: CharSequence) {
     for (i in ampResolverCalls.indices) {
@@ -40,7 +39,16 @@ internal class TextProgramRunner(
       val cleanUrl = linkCleaner.cleanLink(httpUrl).toString()
       cleanLinks += cleanUrl
 
-      ampResolverCalls += ampResolver.resolveAmp(httpUrl, object : AmpResolver.Callback {
+      ampResolverCalls += ampResolver.resolveAmp(httpUrl)
+    }
+
+    // TODO: Show a toast?
+    clipboardCopier.copyText(linksCombiner.combineLinks(cleanLinks))
+
+    for (i in ampResolverCalls.indices) {
+      val ampResolverCall = ampResolverCalls[i]
+
+      val callback = object : AmpResolver.Callback {
         override fun onIoFailure(e: IOException) {
           // TODO
         }
@@ -50,17 +58,16 @@ internal class TextProgramRunner(
         }
 
         override fun onResolved(link: String) {
-          if (link == cleanUrl) {
+          if (link == cleanLinks[i]) {
             return
           }
           cleanLinks[i] = link
           // TODO: Show a toast?
           clipboardCopier.copyText(linksCombiner.combineLinks(cleanLinks))
         }
-      })
+      }
+      ampResolverCall.enqueue(callback)
     }
-    // TODO: Show a toast?
-    clipboardCopier.copyText(linksCombiner.combineLinks(cleanLinks))
   }
 
   // Also upgrades to https.
