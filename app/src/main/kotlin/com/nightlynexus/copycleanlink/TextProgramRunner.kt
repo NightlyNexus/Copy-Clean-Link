@@ -2,6 +2,7 @@ package com.nightlynexus.copycleanlink
 
 import java.io.IOException
 import java.util.concurrent.CopyOnWriteArrayList
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
 internal class TextProgramRunner(
@@ -55,8 +56,14 @@ internal class TextProgramRunner(
           // TODO
         }
 
-        override fun onHttpFailure(code: Int, message: String) {
-          // TODO
+        override fun onHttpFailure(code: Int, responseHttpUrl: HttpUrl, message: String) {
+          val responseUrl = responseHttpUrl.toString()
+          if (responseUrl == cleanLinks[i]) {
+            return
+          }
+          cleanLinks[i] = responseUrl
+          // TODO: Show a toast?
+          clipboardCopier.copyText(linksCombiner.combineLinks(cleanLinks))
         }
 
         override fun onResolved(link: String) {

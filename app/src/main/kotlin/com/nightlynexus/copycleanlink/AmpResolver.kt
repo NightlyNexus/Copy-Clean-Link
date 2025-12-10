@@ -27,6 +27,7 @@ internal class AmpResolver(private val client: Call.Factory) {
 
     fun onHttpFailure(
       code: Int,
+      responseHttpUrl: HttpUrl,
       message: String
     )
 
@@ -58,7 +59,11 @@ internal class AmpResolver(private val client: Call.Factory) {
           ) {
             response.use {
               if (!response.isSuccessful) {
-                callback.onHttpFailure(response.code, response.message)
+                callback.onHttpFailure(
+                  response.code,
+                  response.request.url,
+                  response.message
+                )
                 return
               }
               val source = response.body.source()
@@ -68,6 +73,7 @@ internal class AmpResolver(private val client: Call.Factory) {
                 if (htmlLinkPrefixIndex == -1L) {
                   callback.onHttpFailure(
                     response.code,
+                    response.request.url,
                     "Missing link in HTML document."
                   )
                   return
@@ -77,6 +83,7 @@ internal class AmpResolver(private val client: Call.Factory) {
                 if (htmlLinkSuffixIndex == -1L) {
                   callback.onHttpFailure(
                     response.code,
+                    response.request.url,
                     "Missing link ending in HTML document."
                   )
                   return
@@ -88,6 +95,7 @@ internal class AmpResolver(private val client: Call.Factory) {
                   if (hrefPrefixIndex == -1L) {
                     callback.onHttpFailure(
                       response.code,
+                      response.request.url,
                       "Missing link in HTML document."
                     )
                     return
@@ -97,6 +105,7 @@ internal class AmpResolver(private val client: Call.Factory) {
                   if (hrefSuffixIndex == -1L) {
                     callback.onHttpFailure(
                       response.code,
+                      response.request.url,
                       "Missing link ending quotation mark."
                     )
                     return
