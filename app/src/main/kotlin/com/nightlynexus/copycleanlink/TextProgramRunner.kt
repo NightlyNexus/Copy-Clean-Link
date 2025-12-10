@@ -36,10 +36,11 @@ internal class TextProgramRunner(
       val link = links[i]
       val httpUrl = link.normalizeScheme().toHttpUrl()
 
-      val cleanUrl = linkCleaner.cleanLink(httpUrl).toString()
+      val cleanHttpUrl = linkCleaner.cleanLink(httpUrl)
+      val cleanUrl = cleanHttpUrl.toString()
       cleanLinks += cleanUrl
 
-      ampResolverCalls += ampResolver.resolveAmp(httpUrl)
+      ampResolverCalls += ampResolver.resolveAmp(cleanHttpUrl)
     }
 
     // TODO: Show a toast?
