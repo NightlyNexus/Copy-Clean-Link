@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
   id 'com.android.application'
   id 'com.google.devtools.ksp'
@@ -26,12 +28,14 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
   }
 
-  kotlinOptions {
-    jvmTarget = '1.8'
+  kotlin {
+    compilerOptions {
+      jvmTarget = JvmTarget.JVM_11
+    }
   }
 
   lint {
@@ -52,8 +56,9 @@ android {
     flavorDimensions = ['environment']
 
     internal {
+      def gitCommitSha = 'git rev-parse --short HEAD'.execute().text.trim()
       applicationIdSuffix '.internal'
-      versionNameSuffix '-internal'
+      versionNameSuffix "-internal-${gitCommitSha}"
     }
 
     production {

@@ -1,8 +1,8 @@
 buildscript {
   ext.versions = [
-      androidGradlePlugin: '8.13.1',
+      androidGradlePlugin: '8.13.2',
       androidx: [
-          activity: '1.11.0',
+          activity: '1.12.4',
           annotations: '1.9.1',
           appcompat: '1.7.1',
           collection: '1.5.0',
@@ -10,7 +10,7 @@ buildscript {
           core: '1.17.0',
           drawerlayout: '1.2.0',
           fragment: '1.8.9',
-          lifecycle: '2.9.4',
+          lifecycle: '2.10.0',
           paging: '3.3.6',
           preference: '1.2.1',
           recyclerview: '1.4.0',
@@ -19,13 +19,14 @@ buildscript {
           splashscreen: '1.0.1'
       ],
       billing: '7.1.1',
+      coil: '3.4.0',
       compileSdk: 36,
       coroutines: '1.10.2',
       dagger: '2.56.2',
       demomode: '0.8.1',
       diskcrashreporter: '0.2.5',
       junit: '4.13.2',
-      kotlin: '2.2.21',
+      kotlin: '2.3.10',
       kotlinIo: '0.8.0',
       kotlinPoet: '2.2.0',
       ksp: '2.2.20-2.0.4',
@@ -37,7 +38,7 @@ buildscript {
       okio: '3.16.4',
       retrofit: '3.0.0',
       retrofitLogging: '0.12.0',
-      sqldelight: '2.1.0',
+      sqldelight: '2.2.1',
       truth: '1.4.5'
   ]
 
@@ -63,6 +64,10 @@ buildscript {
       ],
       androidGradlePlugin: "com.android.tools.build:gradle:$versions.androidGradlePlugin",
       billing: "com.android.billingclient:billing-ktx:$versions.billing",
+      coil: [
+          core: "io.coil-kt.coil3:coil:$versions.coil",
+          networkOkhttp: "io.coil-kt.coil3:coil-network-okhttp:$versions.coil"
+      ],
       dagger: [
           compiler: "com.google.dagger:dagger-compiler:$versions.dagger",
           runtime: "com.google.dagger:dagger:$versions.dagger"
