@@ -3,7 +3,7 @@ Copy Clean Link
 
 Copy clean (and AMP-resolved) links on Android. Remove tracking query parameters and other unnecessary ugliness from your links.
 
-The link cleaning follows [Brave’s implementation](https://github.com/brave/adblock-lists/blob/653cbb7f1d96092307f630d3fc9e2f64985c5570/brave-lists/clean-urls.json), resolves the AMP link if the link is an AMP link, and copies the resulting clean link to your Android clipboard.
+The link cleaning follows [Brave’s implementation](https://github.com/brave/adblock-lists/blob/f57dc5fdf1fc81ea70f85512da83d7f7bd127e07/brave-lists/clean-urls.json), resolves the AMP link if the link is an AMP link, and copies the resulting clean link to your Android clipboard.
 
 
 License
