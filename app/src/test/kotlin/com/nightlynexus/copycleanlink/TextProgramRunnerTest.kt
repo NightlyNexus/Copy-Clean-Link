@@ -2,6 +2,7 @@ package com.nightlynexus.copycleanlink
 
 import com.google.common.truth.Truth.assertThat
 import java.util.concurrent.CountDownLatch
+import kotlin.reflect.KClass
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
@@ -159,6 +160,22 @@ https://time.gov/"""
     }
 
     override fun timeout(): Timeout {
+      throw UnsupportedOperationException()
+    }
+
+    override fun <T : Any> tag(type: KClass<T>): T? {
+      throw UnsupportedOperationException()
+    }
+
+    override fun <T> tag(type: Class<out T>): T? {
+      throw UnsupportedOperationException()
+    }
+
+    override fun <T : Any> tag(type: KClass<T>, computeIfAbsent: () -> T): T {
+      throw UnsupportedOperationException()
+    }
+
+    override fun <T : Any> tag(type: Class<T>, computeIfAbsent: () -> T): T {
       throw UnsupportedOperationException()
     }
 
