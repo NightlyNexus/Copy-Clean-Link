@@ -1,21 +1,33 @@
 package com.nightlynexus.cleanurlsjsonprocessor
 
-import com.squareup.moshi.FromJson
-import com.squareup.moshi.JsonClass
-import com.squareup.moshi.ToJson
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
-@JsonClass(generateAdapter = true)
+@Serializable
 internal data class CleanDomain(
-  val include: List<Regex>,
-  val exclude: List<Regex>,
+  val include: List<WildcardRegex>,
+  val exclude: List<WildcardRegex>,
   val params: List<String>
 ) {
-  object RegexJsonAdapter {
-    @ToJson fun toJson(regex: Regex): String {
-      throw UnsupportedOperationException()
+  private typealias WildcardRegex =
+    @Serializable(with = RegexSerializer::class) Regex
+
+  private object RegexSerializer : KSerializer<Regex> {
+    override val descriptor: SerialDescriptor =
+      PrimitiveSerialDescriptor("Regex", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: Regex) {
+      throw SerializationException("RegexJsonAdapter does not support Regex serialization.")
     }
 
-    @FromJson fun fromJson(pattern: String): Regex {
+    override fun deserialize(decoder: Decoder): Regex {
+      val pattern = decoder.decodeString()
       return convertFromWildcardPattern(pattern).toRegex()
     }
 

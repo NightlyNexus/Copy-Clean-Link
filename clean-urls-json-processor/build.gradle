@@ -1,13 +1,14 @@
 plugins {
   id 'com.google.devtools.ksp'
   id 'org.jetbrains.kotlin.jvm'
+  id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 dependencies {
-  ksp deps.moshi.kotlinCodegen
-  implementation deps.moshi.core
-  implementation deps.okio
   implementation deps.kotlinPoet.core
   implementation deps.kotlinPoet.ksp
+  implementation deps.kotlin.serialization.json
+  implementation deps.kotlin.serialization.core
+  implementation deps.kotlin.stdlibJdk8
   implementation deps.ksp.api
 }

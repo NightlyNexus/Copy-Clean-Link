@@ -13,10 +13,9 @@ import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.writeTo
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
-import okio.buffer
-import okio.source
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 
 // https://github.com/brave/adblock-lists/blob/0256194a550b3ee64cbe951e7a18d356a12b0e70/brave-lists/clean-urls.json
 internal class CleanUrlsJsonProcessor(
@@ -54,17 +53,12 @@ internal class CleanUrlsJsonProcessor(
     return emptyList()
   }
 
+  @OptIn(ExperimentalSerializationApi::class)
   private fun cleanDomains(): List<CleanDomain> {
-    val moshi = Moshi.Builder()
-      .add(CleanDomain.RegexJsonAdapter)
-      .build()
-    val cleanDomainListAdapter = moshi.adapter<List<CleanDomain>>(
-      Types.newParameterizedType(List::class.java, CleanDomain::class.java)
+    val json = Json
+    return json.decodeFromStream(
+      CleanDomain::class.java.classLoader.getResourceAsStream("clean_urls.json")!!
     )
-    return CleanDomain::class.java.classLoader.getResourceAsStream("clean_urls.json")!!
-      .source().buffer().use { source ->
-        cleanDomainListAdapter.fromJson(source)!!
-      }
   }
 
   private fun initializer(
