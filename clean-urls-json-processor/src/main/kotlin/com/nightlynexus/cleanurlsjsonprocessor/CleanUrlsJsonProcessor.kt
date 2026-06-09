@@ -18,7 +18,7 @@ import com.squareup.moshi.Types
 import okio.buffer
 import okio.source
 
-// https://github.com/brave/adblock-lists/blob/f57dc5fdf1fc81ea70f85512da83d7f7bd127e07/brave-lists/clean-urls.json
+// https://github.com/brave/adblock-lists/blob/0256194a550b3ee64cbe951e7a18d356a12b0e70/brave-lists/clean-urls.json
 internal class CleanUrlsJsonProcessor(
   private val codeGenerator: CodeGenerator
 ) : SymbolProcessor {
