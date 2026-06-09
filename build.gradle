@@ -157,8 +157,8 @@ allprojects {
   }
 
   afterEvaluate { project ->
-    project.configurations.all {
-      resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+    project.configurations.configureEach { configuration ->
+      resolutionStrategy.eachDependency { details ->
         def requested = details.requested
         if (requested.version.endsWith('+')) {
           throw new GradleException(
