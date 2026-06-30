@@ -456,6 +456,11 @@
 
     ],
     "params": [
+      "afsrc",
+      "camefrom",
+      "impradid",
+      "wt.mc_id",
+      "impradname",
       "REFERRAL_ID"
     ]
   },
@@ -705,6 +710,7 @@
 
     ],
     "params": [
+      "_t",
       "embed_source",
       "refer",
       "referer_url",
@@ -1002,6 +1008,8 @@
       "fb_comment_id",
       "fb_ref",
       "fb_source",
+      "clickid",
+      "ircid",
       "irclickid",
       "irgwc",
       "ir_adid",
@@ -1153,6 +1161,7 @@
   },
   {
     "include": [
+      "*://*.threads.com/*",
       "*://*.threads.net/*"
     ],
     "exclude": [

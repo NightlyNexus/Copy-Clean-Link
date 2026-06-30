@@ -17,7 +17,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 
-// https://github.com/brave/adblock-lists/blob/0256194a550b3ee64cbe951e7a18d356a12b0e70/brave-lists/clean-urls.json
+// https://github.com/brave/adblock-lists/blob/0edb6bc8f98c43bf936f14c31b2b43151d452b7e/brave-lists/clean-urls.json
 internal class CleanUrlsJsonProcessor(
   private val codeGenerator: CodeGenerator
 ) : SymbolProcessor {
